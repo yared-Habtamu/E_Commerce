@@ -1,0 +1,44 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" href="{% static 'products/products.css' %}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/products/">Products</a></li>
+                <li><a href="/contact/">Contact</a></li>
+                <li><a href="#">SUPP</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Our Products</h1>
+        {% if products %}
+            <ul>
+                {% for product in products %}
+                    <li>
+                        <h2>{{ product.name }}</h2>
+                        <p>{{ product.description }}</p>
+                        <p>Price: {{ product.price }} Birr</p>
+                        {% if product.image_url %}
+                            <img src="{{ product.image_url }}" alt="{{ product.name }}" width="200">
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No products available at the moment.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; Jared: 2024 Our Product Store. All rights reserved.</p>
+    </footer>
+</body>
+</html>

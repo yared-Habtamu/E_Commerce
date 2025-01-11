@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import django_heroku
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -25,8 +27,7 @@ SECRET_KEY = 'django-insecure-ga+e4tcw92usc^ape&&^6=w3302vc2zk_440o6lcw4+19cwo6c
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -40,9 +41,9 @@ INSTALLED_APPS = [
     'products',
     'rest_framework',
     'rest_framework.authtoken',  # For authentication
-    'corsheaders',
     'django_filters',
-    # 'rest_framework_simplejwt',
+    'rest_framework_simplejwt'
+    # 'accounts',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce_api.urls'
@@ -60,7 +63,7 @@ ROOT_URLCONF = 'ecommerce_api.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'your_app/templates'],  # Adjust the path accordingly
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -75,18 +78,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce_api.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Correct the engine name to 'sqlite3'
+        'NAME': BASE_DIR / 'db.sqlite3',  # Path to the SQLite database file
     }
 }
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
@@ -105,7 +105,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -117,11 +116,13 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_DIRS = (os.path.join(BASE_DIR, 'static'),)
+django_heroku.settings(locals())
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -130,13 +131,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
+#
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3000",  # Replace with your frontend URL
+#     "http://127.0.0.1:8000",
+# ]
 
+# This is for registration and login acoounts
+# AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
+#to ensure the custom user model is configured
+# AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
 

@@ -1,37 +1,49 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions, viewsets
-from .models import Product
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import SearchFilter, OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
-from .serializers import ProductSerializer
-from .filters import ProductFilter
+from rest_framework import generics, permissions
+from .models import Product, Category, Review, Cart, Order
+from .serializers import ProductSerializer, CategorySerializer, ReviewSerializer, CartSerializer, OrderSerializer
+
+
+def home(request):
+    return render(request, 'products/home.html')
 
 
 def product_list(request):
-    product = Product.objects.all()
-    return render(request, 'products/home.html', {'products': product})
+    product = Product.all()
+    return render(request, 'products/products.html', {'products': product})
 
 
 class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['category', 'price']
-    search_fields = ['name', 'description']
-    ordering_fields = ['price', 'stock_quantity', 'created_date']
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    # permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filterset_class = ProductFilter  # Add this line to use the filter
-    # permission_classes = [permissions.IsAuthenticated]
+class ReviewListCreateView(generics.ListCreateAPIView):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class CartListCreateView(generics.ListCreateAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class OrderListCreateView(generics.ListCreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

@@ -1,1 +1,60 @@
-<h1>ECOM</h1>>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Ecommerce{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7O2lwH8jtL7V3gZVRxjQ/eoJ4PJJgN4Zhl+" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'products/main.css' %}">
+</head>
+<body>
+<header class="header bg-dark text-white py-3">
+    <div class="container d-flex justify-content-between align-items-center">
+        <h1 class="logo"><a href="/" class="text-white text-decoration-none">Shola Commerce</a></h1>
+        <nav class="nav">
+            <ul class="nav">
+                <li class="nav-item"><a class="nav-link text-white" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="/products/">Products</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="/contact/">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="auth-buttons">
+            <a href="/login/" class="btn btn-outline-light btn-sm mx-1">Login</a>
+            <a href="/register/" class="btn btn-primary btn-sm mx-1">Register</a>
+        </div>
+    </div>
+<!--    <div class="col-md-8" >-->
+<!--        {% if messages %}-->
+<!--            {% for message in messages%}-->
+<!--                <div class="alert-{{ message.tags }}">-->
+<!--                    {{message}}-->
+<!--                </div>-->
+<!--            {% endfor %}-->
+<!--        {% endif %}-->
+<!--    </div>-->
+</header>
+    <main class="content py-4">
+        <div class="container">
+            {% block content %}
+            <p>Here is what you need</p>
+            {% endblock %}
+        </div>
+        <h1>Welcome to Our Product Store</h1>
+        <p>Explore a variety of products available for purchase.</p>
+        <a href="/products/">View Products</a>
+    </main>
+    <footer class="footer bg-dark text-white text-center py-3">
+        <div class="container">
+            <ul class="nav flex-column align-items-center">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+                <li class="nav-item"><a href="admin/" class="nav-link px-2 text-muted">Admin</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+            <p class="text-center text-muted mt-3">&copy; Jared 2021</p>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76A2PGqqK1+EF2FDLhQe88Rnv8AB4FLsF5x63xQCUe2Hq3ZC/+7Kw5Qf9CUG65K" crossorigin="anonymous"></script>
+</body>
+</html>
